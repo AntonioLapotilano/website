@@ -11,6 +11,6 @@ class Post extends Model
     protected $fillable = ['user_id', 'content'];
     protected $cast =[
         'content' => 'string',
-        'user_id' => 'integer',
+        'user_id' => 'integer'
     ];
 }
