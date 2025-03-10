@@ -13,7 +13,6 @@
                         <div class="w-full flex justify-end">
                             <button class="btn btn-sm btn-primary" type="button" @click="updatePost">Submit</button>
                         </div>
-
                     </div>
                 </div>
                 <div v-if="$page.props.user.role_id === 2" class="absolute top-2 right-2 text-gray-500 flex gap-2">
@@ -38,6 +37,19 @@
                     </button>
 
 
+                </div>
+                <div class="flex justify-end px-4 text-gray-500 text-sm">
+                    <p> {{ post.user.name }}</p>
+                </div>
+                <div class="flex justify-end px-4 text-gray-500 text-sm">
+                    <p>
+                        {{ post.display_created_at }}
+                    </p>
+                </div>
+                <div class="flex justify-end px-4 pb-4 text-gray-500 text-sm">
+                    <p>
+                        {{ post.role.name }}
+                    </p>
                 </div>
             </div>
         </div>
