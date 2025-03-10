@@ -14,8 +14,7 @@ class PostController extends Controller
     public function index()
     {
 
-
-        $posts = Post::all();
+           $posts = Post::all();
         $postData = fractal($posts, new PostTransformer())->toArray()['data'];
 
         return Inertia::render('Post/Index')->with([
@@ -28,17 +27,22 @@ class PostController extends Controller
         $req = $request->validate([
             'id' => ['nullable', 'exists:users,id'],
             'content' => ['required', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:10240'],
         ]);
         $user = Auth::user();
         if (!$user) {
             abort(500);
         }
-        Post::create([
+        $newPost = Post::create([
             'user_id' => $user->id,
             'content' => $req['content'],
         ]);
+        if (isset($req['image']) && !empty($req['image'])) {
+            $newPost->addMedia($req['image'])->toMediaCollection(Post::MEDIA_COLLECTION_IMAGE);
+        }
         return redirect()->back();
     }
+
 
     public function update(Request $request, Post $post)
     {
@@ -60,6 +64,9 @@ class PostController extends Controller
         $post->delete();
         return redirect()->back();
     }
+
+
+
 
 
 }

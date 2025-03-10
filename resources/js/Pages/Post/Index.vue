@@ -58,6 +58,29 @@
                 <div class="w-full flex justify-center">
                     <textarea v-model="form.content" class="w-1/2 rounded-lg p-4" placeholder="" rows="4"></textarea>
                 </div>
+                <div class="flex justify-center">
+                    <p v-if="$page.props.errors.content" class="text-red-500">*{{ $page.props.errors.content }}</p>
+                </div>
+
+                <div class="w-full flex justify-center my-4">
+                    <button
+                        v-if="!previewImage"
+                        class="w-60 h-60 border border-dashed flex justify-center items-center text-white cursor-pointer"
+                        type="button"
+                        @click="$refs.photoInputRef.click()">
+                        <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5"
+                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div v-if="previewImage"
+                         class="w-60 h-60 border border-dashed flex justify-center items-center text-white cursor-pointer"
+                         @click="$refs.photoInputRef.click()">
+                        <img :src="previewImage" class="w-60 h-60 object-cover">
+                    </div>
+                </div>
+                <input ref="photoInputRef" accept="image/*" class="hidden" type="file"
+                       @change="handleSelectImage">
                 <div class="w-full flex justify-center mt-4">
                     <button :disabled="isLoading" class="btn bg-pink-500">Submit</button>
                 </div>
@@ -86,18 +109,27 @@ export default {
         return {
             form: {
                 id: null,
-                content: ""
+                content: "",
+                image: null
             },
             editForm: {
                 id: null,
                 content: ""
             },
-            isLoading: false
+            isLoading: false,
+            previewImage: null
         }
     },
     mounted() {
     },
     methods: {
+        handleSelectImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const blobUrl = URL.createObjectURL(file);
+            this.previewImage = blobUrl;
+            this.form.image = file;
+        },
         async updatePost() {
             this.isLoading = true;
             const result = await this.$swal.fire({
@@ -167,11 +199,12 @@ export default {
                         icon: "success"
                     });
                     window.location.reload();
+                },
+                 onError: () => {
+                    this.isLoading = false;
                 }
             });
         }
     }
 };
 </script>
-
-

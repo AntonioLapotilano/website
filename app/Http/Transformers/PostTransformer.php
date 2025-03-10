@@ -15,8 +15,8 @@ class PostTransformer extends TransformerAbstract
         $data = [
             'id' => $post->id,
             'content' => $post->content,
-            'display_created_at' => Carbon::parse($post->created_at)->thaidate('j M Y H:m'),
-            'display_updated_at' => Carbon::parse($post->updated_at)->thaidate('j M Y'),
+            'display_created_at' => Carbon::parse($post->created_at)->thaidate('j M Y H:i'),
+            'display_updated_at' => Carbon::parse($post->updated_at)->thaidate('j M Y H:i'),
             'user' => $post->user->toArray(),
             'role' => $post->user->role->toArray()
         ];
